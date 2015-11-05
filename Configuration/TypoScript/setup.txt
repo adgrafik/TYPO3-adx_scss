@@ -1,0 +1,22 @@
+
+plugin.tx_adxscss {
+
+	# If set the compiler will save the file with this name.
+	targetFilename = 
+
+	# Comma seperated string or array with x = directory.
+#	importPaths = 
+
+	# Set the formatter: Options: 0 (default) is normal formatting, nested, compressed
+#	formatter = 
+
+	# Set the numberPrecision (default: 5)
+#	numberPrecision = 5
+
+	# Set the lineNumberStyle Options: 0 (default), lineComments, debugInfo
+#	lineNumberStyle = 0
+
+	variables {
+		# Place your own variables here.
+	}
+}
