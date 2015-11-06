@@ -16,8 +16,11 @@ if (TYPO3_MODE == 'FE') {
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['clearCachePostProc'][] = 'AdGrafik\\AdxScss\\Hooks\\T3libTceMainHook->clearCachePostProc';
 
 // Add XCLASS to rtehtmlarea, tinymce_rte and tinymce for tinymce4_rte.
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects']['TYPO3\\CMS\\Rtehtmlarea\\Form\\Element\\RichTextElement'] = array(
+	'className' => 'AdGrafik\\AdxScss\\XClass\\RichTextElementHook',
+);
 $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects']['TYPO3\\CMS\\Rtehtmlarea\\RteHtmlAreaBase'] = array(
-	'className' => 'AdGrafik\\Adxscss\\XClass\\RteHtmlAreaBase',
+	'className' => 'AdGrafik\\AdxScss\\XClass\\RteHtmlAreaBaseHook',
 );
 $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects']['tx_tinymce_rte_base'] = array(
 	'className' => 'AdGrafik\\AdxScss\\XClass\\TinyMceRteBase',
