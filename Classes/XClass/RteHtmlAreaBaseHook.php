@@ -65,7 +65,7 @@ class RteHtmlAreaBaseHook extends RteHtmlAreaBase {
 	private function parseScssFile($contentCssFile) {
 
 		// If not a SCSS file, nothing else to do.
-		if (pathinfo($contentCssFile,  PATHINFO_EXTENSION) !== 'scss') {
+		if (ScssUtility::isValidFile($contentCssFile) === FALSE) {
 			return $contentCssFile;
 		}
 

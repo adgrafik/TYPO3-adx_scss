@@ -39,14 +39,14 @@ class RichTextElementHook extends RichTextElement {
 		$scss = GeneralUtility::makeInstance('AdGrafik\\AdxScss\\Scss');
 		$configuration = ScssUtility::getConfiguration($this->pidOfPageRecord);
 
-		if (isset($this->processedRteConfiguration['contentCSS'])) {
+		if (isset($this->processedRteConfiguration['contentCSS']) && ScssUtility::isValidFile($this->processedRteConfiguration['contentCSS'])) {
 			$this->processedRteConfiguration['contentCSS'] = $scss->compile($this->processedRteConfiguration['contentCSS'], $configuration);
 		}
 
 		if (is_array($this->processedRteConfiguration['contentCSS.'])) {
 			foreach ($this->processedRteConfiguration['contentCSS.'] as $key => $cssFile) {
 				// If not a SCSS file, nothing else to do.
-				if (pathinfo($cssFile,  PATHINFO_EXTENSION) !== 'scss') {
+				if (ScssUtility::isValidFile($cssFile) === FALSE) {
 					continue;
 				}
 				$this->processedRteConfiguration['contentCSS.'][$key] = $scss->compile($cssFile, $configuration);

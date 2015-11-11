@@ -46,7 +46,7 @@ class TinyMceRteBase extends \tx_tinymce_rte_base {
 		foreach ($files as $pathAndFilename) {
 
 			// If not a SCSS file, nothing else to do.
-			if (pathinfo($pathAndFilename,  PATHINFO_EXTENSION) !== 'scss') {
+			if (ScssUtility::isValidFile($pathAndFilename) === FALSE) {
 				$cssFiles[] = $pathAndFilename;
 				continue;
 			}

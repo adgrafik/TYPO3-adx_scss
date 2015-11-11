@@ -46,7 +46,7 @@ class PageRendererHook {
 		foreach ($parameters['cssFiles'] as $pathAndFilename => $cssConfiguration) {
 
 			// If not a SCSS file, nothing else to do.
-			if (pathinfo($pathAndFilename,  PATHINFO_EXTENSION) !== 'scss') {
+			if (ScssUtility::isValidFile($pathAndFilename) === FALSE) {
 				$cssFiles[$pathAndFilename] = $cssConfiguration;
 				continue;
 			}
