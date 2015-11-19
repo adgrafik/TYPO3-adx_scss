@@ -25,6 +25,8 @@ namespace AdGrafik\AdxScss;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+include __DIR__ . '/../Vendor/leafo/scssphp/scss.inc.php';
+
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class Scss implements \TYPO3\CMS\Core\SingletonInterface {
@@ -62,7 +64,8 @@ class Scss implements \TYPO3\CMS\Core\SingletonInterface {
 		$returnUri = isset($configuration['returnUri']) ? $configuration['returnUri'] : TRUE;
 
 		$cacheIdentifier = sha1($content);
-		if ($cached = $this->getCachedContent($cacheIdentifier)) {
+		$cached = $this->getCachedContent($cacheIdentifier);
+		if ($cached) {
 			if ($returnUri === 'absolute') {
 				return $cached;
 			} else if ($returnUri === 'siteURL') {
@@ -108,7 +111,7 @@ class Scss implements \TYPO3\CMS\Core\SingletonInterface {
 		}
 		foreach ($importPaths as $importPath) {
 			$importPath = GeneralUtility::getFileAbsFileName($importPath);
-			$importPath = rtrim($path, '/') . '/';
+			$importPath = rtrim($importPath, '/') . '/';
 			$this->scss->addImportPath($importPath);
 		}
 
@@ -117,17 +120,29 @@ class Scss implements \TYPO3\CMS\Core\SingletonInterface {
 			? $configuration['formatter']
 			: NULL;
 		switch ($configuration['formatter']) {
-			case 'compressed':
-				$formatter = 'scss_formatter_compressed';
+			case 'compact':
+				$formatter = 'Compact';
 				break;
-			case 'nested':
-				$formatter = 'scss_formatter_nested';
+			case 'compressed':
+				$formatter = 'Compressed';
+				break;
+			case 'crunched':
+				$formatter = 'Crunched';
+				break;
+			case 'debug':
+				$formatter = 'Debug';
+				break;
+			case 'expanded':
+				$formatter = 'Expanded';
+				break;
+			case 'output_block':
+				$formatter = 'OutputBlock';
 				break;
 			default:
-				$formatter = 'scss_formatter';
+				$formatter = 'Nested';
 				break;
 		}
-		$this->scss->setFormatter($formatter);
+		$this->scss->setFormatter('Leafo\\ScssPhp\\Formatter\\' . $formatter);
 
 		// Set the lineNumberStyle.
 		$configuration['lineNumberStyle'] = isset($configuration['lineNumberStyle'])
@@ -189,7 +204,7 @@ class Scss implements \TYPO3\CMS\Core\SingletonInterface {
 		// Save cache depended on sha1 sum of parsed files.
 		$parsedFiles = $this->scss->getParsedFiles();
 		$cacheFiles = array();
-		foreach ($parsedFiles as $parsedPathAndFilename => $mtime) {
+		foreach ($parsedFiles as $parsedPathAndFilename) {
 			$cacheFiles[$parsedPathAndFilename] = sha1_file($parsedPathAndFilename);
 		}
 		$this->cache->set('parsedFiles_' . $cacheIdentifier, $cacheFiles);
@@ -200,7 +215,7 @@ class Scss implements \TYPO3\CMS\Core\SingletonInterface {
 
 	/**
 	 * @param string $cacheIdentifier
-	 * @return string
+	 * @return boolean
 	 */
 	protected function getCachedContent($cacheIdentifier) {
 
@@ -218,5 +233,3 @@ class Scss implements \TYPO3\CMS\Core\SingletonInterface {
 	}
 
 }
-
-?>
