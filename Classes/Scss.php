@@ -43,7 +43,7 @@ class Scss implements \TYPO3\CMS\Core\SingletonInterface {
 	 * @return void
 	 */
 	public function __construct() {
-		$this->scss = new \Leafo\ScssPhp\Compiler();
+		$this->scss = GeneralUtility::makeInstance('Leafo\\ScssPhp\\Compiler');
 		$this->cache = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Cache\\CacheManager')->getCache('adx_scss');
 	}
 
@@ -108,24 +108,18 @@ class Scss implements \TYPO3\CMS\Core\SingletonInterface {
 		}
 		foreach ($importPaths as $importPath) {
 			$importPath = GeneralUtility::getFileAbsFileName($importPath);
-			$importPath = rtrim($path, '/') . '/';
+			$importPath = rtrim($importPath, '/') . '/';
 			$this->scss->addImportPath($importPath);
 		}
 
 		// Set the formatter.
-		$configuration['formatter'] = isset($configuration['formatter'])
-			? $configuration['formatter']
+		$formatter = isset($configuration['formatter'])
+			? ucfirst($configuration['formatter'])  // Make first char uppercase to be backwards compatible.
 			: NULL;
-		switch ($configuration['formatter']) {
-			case 'compressed':
-				$formatter = 'scss_formatter_compressed';
-				break;
-			case 'nested':
-				$formatter = 'scss_formatter_nested';
-				break;
-			default:
-				$formatter = 'scss_formatter';
-				break;
+		$formatter = 'Leafo\\ScssPhp\\Formatter\\' . $formatter;
+		// Set defaut formatter if class is not available.
+		if (class_exists($formatter) === FALSE) {
+			$formatter = 'Leafo\\ScssPhp\\Formatter\\Nested';
 		}
 		$this->scss->setFormatter($formatter);
 
@@ -199,8 +193,10 @@ class Scss implements \TYPO3\CMS\Core\SingletonInterface {
 	}
 
 	/**
+	 * Returns FALSE if there is no chached content or any file had changed, otherwise it returns the chached filename if exists.
+	 *
 	 * @param string $cacheIdentifier
-	 * @return string
+	 * @return mixed
 	 */
 	protected function getCachedContent($cacheIdentifier) {
 
