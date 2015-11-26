@@ -28,5 +28,8 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects']['tx_tinymce_rte_base'] = array(
 $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects']['SGalinski\\Tinymce4Rte\\Editors\\RteBase'] = array(
 	'className' => 'AdGrafik\\AdxScss\\XClass\\TinyMce4RteBase',
 );
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects']['SGalinski\\Tinymce4Rte\\Form\\Element\\RichTextElement'] = array(
+	'className' => 'AdGrafik\\AdxScss\\XClass\\TinyMce4RichTextElementHook',
+);
 
 ?>
